@@ -66,9 +66,9 @@
               <li class="nav-item"><a href="browsejobs.html" class="nav-link">Browse Jobs</a></li>
               <li class="nav-item"><a href="companies.html" class="nav-link">Companies</a></li>
               <li class="nav-item"><a href="blog.html" class="nav-link">Services</a></li>
-              <li class="nav-item cta cta-colored ml-2"><a href="login" class="nav-link">Login</a></li>
-              <li class="nav-item cta cta-colored ml-2"><a href="job-post.html" class="nav-link">Register</a></li>
-              <li class="nav-item cta mr-md-1 ml-2"><a href="new-post.html" class="nav-link">Employer Login</a></li>
+              <li class="nav-item cta cta-colored ml-2"><a href="{% url 'loginpage' %}" class="nav-link">Login</a></li>
+              <li class="nav-item cta cta-colored ml-2"><a href="{% url 'register' %}" class="nav-link">Register</a></li>
+              <li class="nav-item cta mr-md-1 ml-2"><a href="{% url 'loginpage' %}" class="nav-link">Employer Login</a></li>
             </ul>
           </div>
         </div>

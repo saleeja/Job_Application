@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile Detail</title>
+</head>
+<body>
+    <h1>User Profile Detail</h1>
+    <div>
+        <h2>Personal Information</h2>
+        <form method="POST" action="{% url 'profile_edit' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="full_name">Full Name:</label>
+                <input type="text" id="full_name" name="full_name" value="{{ profile.user.full_name }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="phone_number">Phone Number:</label>
+                <input type="text" id="phone_number" name="phone_number" value="{{ profile.phone_number }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="current_location">Current Location:</label>
+                <input type="text" id="current_location" name="current_location" value="{{ profile.current_location }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address" value="{{ profile.address }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="experience_status">Experience Level:</label>
+                <input type="text" id="experience_status" name="experience_status" value="{{ profile.experience_status }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="profile_summary">Profile Summary:</label>
+                <input type="text" id="profile_summary" name="profile_summary" value="{{ profile.profile_summary }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="key_skills">Key Skills:</label>
+                <input type="text" id="key_skills" name="key_skills" value="{{ profile.key_skills }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="projects">Projects:</label>
+                <input type="text" id="projects" name="projects" value="{{ profile.projects }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="education">Education:</label>
+                <input type="text" id="education" name="education" value="{{ profile.education }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="certification_details">Certification Details:</label>
+                <input type="text" id="certification_details" name="certification_details" value="{{ profile.certification_details }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="department">Department Looking for Job:</label>
+                <input type="text" id="department" name="department" value="{{ profile.department }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="languages_known">Languages Known:</label>
+                <input type="text" id="languages_known" name="languages_known" value="{{ profile.languages_known }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <input type="text" id="gender" name="gender" value="{{ profile.gender }}" readonly>
+            </div>
+            <button type="submit">Edit</button>
+        </form>
+        <br>
+        <a href="{% url 'index' %}">Back to Home</a>
+    </div>
+</body>
+</html>
+
+
+
+
