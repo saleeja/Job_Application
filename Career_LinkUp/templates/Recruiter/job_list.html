@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Job Listings</title>
+</head>
+<body>
+    <h1>Job Listings</h1>
+    <ul>
+        {% for job in jobs %}
+            <li>{{ job.title }} - <a href="{% url 'edit_job' job.id %}">Edit</a> | <a href="{% url 'delete_job' job.id %}">Delete</a></li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'create_job' %}">Create New Job</a>
+</body>
+</html>

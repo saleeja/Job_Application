@@ -1,5 +1,7 @@
 from django.contrib.auth.models import AbstractUser,Group, Permission
 from django.db import models
+from django.utils import timezone
+
 
 class CustomUser(AbstractUser):
     JOB_SEEKER = 'job_seeker'
@@ -30,7 +32,7 @@ class CustomUser(AbstractUser):
  
 
 
-class Profile(models.Model):
+class JoobseekerProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=15)
     current_location = models.CharField(max_length=100)
@@ -60,3 +62,18 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
+    
+
+class CompanyProfile(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    location = models.CharField(max_length=100)
+    industry = models.CharField(max_length=100)
+    website = models.URLField(blank=True)
+    logo = models.ImageField(upload_to='company_logos/', blank=True)
+
+    def __str__(self):
+        return self.name
+
+

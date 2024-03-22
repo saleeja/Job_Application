@@ -43,9 +43,16 @@ class RegistrationForm(UserCreationForm):
 
 
 
-from .models import Profile
+from .models import JoobseekerProfile
 
 class ProfileForm(forms.ModelForm):
     class Meta:
-        model = Profile
+        model = JoobseekerProfile
         fields = '__all__' 
+
+from .models import CompanyProfile
+
+class CompanyProfileForm(forms.ModelForm):
+    class Meta:
+        model = CompanyProfile
+        fields = ['name', 'description', 'location', 'industry', 'website', 'logo']

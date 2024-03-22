@@ -5,13 +5,16 @@ urlpatterns = [
     path('',views.index, name='index'),
     path('loginpage/',views.user_login, name='loginpage'),
     path('register/',views.user_register, name='register'),
-    # path('update_profile/',views.update_profile, name='update_profile')
     path('create-profile/', views.create_profile, name='create_profile'),
     path('update-profile/', views.update_profile, name='update_profile'),
     path('profile_detail/', views.profile_detail, name='profile_detail'),
     path('profile/edit/', views.edit_profile, name='profile_edit'),
-    path("main/",views.main,name='main')
+    path("main/",views.main,name='main'),
+    path('logout_view/',views.logout_view,name='logout_view'),
+    path('create_company_profile/', views.create_company_profile, name='create_company_profile'),
+    path('com_profile_detail/', views.com_profile_detail, name='com_profile_detail'),
+    path('com_update_profile/', views.com_update_profile, name='com_update_profile'),
+    path('com_edit_profile/', views.com_edit_profile, name='com_edit_profile'),
 
-    
- 
+
 ]
