@@ -1,0 +1,19 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Search Results for "{{ search_query }}"</h2>
+    {% if job_listings %}
+        <ul>
+            {% for job in job_listings %}
+                <li>{{ job.title }} - {{ job.location }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No job listings found for "{{ search_query }}"</p>
+    {% endif %}
+</body>
+</html>

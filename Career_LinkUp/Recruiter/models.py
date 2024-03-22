@@ -9,7 +9,7 @@ class JobListing(models.Model):
         ('contract', 'Contract'),
         ('remote', 'Remote'),
     ]
-    
+    company = models.ForeignKey('JobSeeker.CompanyProfile', on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     description = models.TextField()
     required_qualifications = models.TextField()

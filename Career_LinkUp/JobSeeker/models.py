@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser,Group, Permission
 from django.db import models
 from django.utils import timezone
+from Recruiter.models import JobListing
 
 
 class CustomUser(AbstractUser):
@@ -10,18 +11,18 @@ class CustomUser(AbstractUser):
         ('job_seeker', 'Job Seeker'),
         ('employer', 'Employer/Recruiter'),
     )
-    user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES, default='job_seeker')
+    user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES)
     full_name = models.CharField(max_length=150)
     
 
     def __str__(self):
         return self.username
     
-    def is_job_seeker(self):
-        return self.user_type == self.JOB_SEEKER
+    # def is_job_seeker(self):
+    #     return self.user_type == self.JOB_SEEKER
 
-    def is_recruiter(self):
-        return self.user_type == self.RECRUITER
+    # def is_recruiter(self):
+    #     return self.user_type == self.RECRUITER
     
     class Meta:
         swappable = 'AUTH_USER_MODEL'
@@ -76,4 +77,22 @@ class CompanyProfile(models.Model):
     def __str__(self):
         return self.name
 
+
+class JobApplication(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('accepted', 'Accepted'),
+        ('rejected', 'Rejected'),
+    ]
+    job = models.ForeignKey(JobListing, on_delete=models.CASCADE)
+    applicant = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    applicant_email = models.EmailField()
+    resume = models.FileField(upload_to='resumes/')
+    cover_letter = models.TextField()
+    applied_at = models.DateTimeField(default=timezone.now)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
+
+    def __str__(self):
+        return f"{self.applicant.username}'s application for {self.job.title}"
+    
 

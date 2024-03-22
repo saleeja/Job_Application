@@ -56,3 +56,26 @@ class CompanyProfileForm(forms.ModelForm):
     class Meta:
         model = CompanyProfile
         fields = ['name', 'description', 'location', 'industry', 'website', 'logo']
+
+
+from .models import JobApplication
+
+class ApplyJobForm(forms.ModelForm):
+    class Meta:
+        model = JobApplication
+        fields = ['resume']
+
+# forms.py in the job_seeker app
+
+from django import forms
+from .models import JobApplication
+
+class JobApplicationForm(forms.ModelForm):
+    class Meta:
+        model = JobApplication
+        fields = ['applicant', 'resume', 'cover_letter']
+
+
+class JobSearchForm(forms.Form):
+    search_query = forms.CharField(label='Search Jobs', max_length=100)
+

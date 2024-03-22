@@ -1,0 +1,32 @@
+<!-- job_list.html in the templates folder of the job_seeker app -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Job Listings</title>
+</head>
+<body>
+    {% if job_listings %}
+        <ul>
+            {% for job in job_listings %}
+                <li>   
+                    <h3>{{ job.title }}</h3>
+                    <p>Description: {{ job.description }}</p>
+                    <p>required_qualifications: {{ job.required_qualifications }}</p>
+                    <p>desired_qualifications: {{ job.desired_qualifications }}</p>
+                    <p>application_deadline: {{ job.application_deadline }}</p>
+                    <p>responsibilities: {{ job.responsibilities }}</p>
+                    <p>location: {{ job.location }}</p>
+                    <p>job_type: {{ job.job_type }}</p>
+                    <p>company_benefits: {{ job.company_benefits }}</p>
+                    <p>how_to_apply: {{ job.how_to_apply }}</p>
+                    <p>Salary Range: {{ job.salary_range }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No job listings available</p>
+    {% endif %}
+</body>
+</html>

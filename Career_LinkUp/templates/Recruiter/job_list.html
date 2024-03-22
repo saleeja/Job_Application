@@ -11,6 +11,6 @@
             <li>{{ job.title }} - <a href="{% url 'edit_job' job.id %}">Edit</a> | <a href="{% url 'delete_job' job.id %}">Delete</a></li>
         {% endfor %}
     </ul>
-    <a href="{% url 'create_job' %}">Create New Job</a>
+    <button><a href="{% url 'create_job' %}">Create New Job</a></button>
 </body>
 </html>

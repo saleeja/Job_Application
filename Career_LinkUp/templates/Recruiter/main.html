@@ -31,6 +31,7 @@
 
     <!-- Template Stylesheet -->
     <link href="{% static 'main/css/style.css'%}" rel="stylesheet">
+    
 </head>
 
 <body>
@@ -48,7 +49,7 @@
         <div class="sidebar pe-4 pb-3">
             <nav class="navbar bg-light navbar-light">
                 <a href="index.html" class="navbar-brand mx-4 mb-3">
-                    <h3 class="text-primary">CareerLinkUp</h3>
+                    <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>DASHMIN</h3>
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
                     <div class="position-relative">
@@ -56,8 +57,8 @@
                         <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                     </div>
                     <div class="ms-3">
-                        <h6 class="mb-0">Saleeja S</h6>
-                        <span>Python devloper</span>
+                        <h6 class="mb-0">Jhon Doe</h6>
+                        <span>Admin</span>
                     </div>
                 </div>
                 <div class="navbar-nav w-100">
@@ -99,19 +100,49 @@
                 <a href="#" class="sidebar-toggler flex-shrink-0">
                     <i class="fa fa-bars"></i>
                 </a>
-                <form class="d-none d-md-flex ms-4" action="{% url 'job_search' %}" method="GET">
-                    <input class="form-control border-0" type="search" name="query" placeholder="Search">
-                    <button type="submit">Search</button>
+                <form class="d-none d-md-flex ms-4">
+                    <input class="form-control border-0" type="search" placeholder="Search">
                 </form>
-    
                 <div class="navbar-nav align-items-center ms-auto">
                     <div class="nav-item dropdown">
-                        <a href="{% url 'job_application_status' %}" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                             <i class="fa fa-envelope me-lg-2"></i>
-                            <span class="d-none d-lg-inline-flex">Applied Jobs</span>
+                            <span class="d-none d-lg-inline-flex">Message</span>
                         </a>
+                        <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
+                            <a href="#" class="dropdown-item">
+                                <div class="d-flex align-items-center">
+                                    <img class="rounded-circle" src="{% static 'main/img/user.jpg'%}" alt="" style="width: 40px; height: 40px;">
+                                    <div class="ms-2">
+                                        <h6 class="fw-normal mb-0">Jhon send you a message</h6>
+                                        <small>15 minutes ago</small>
+                                    </div>
+                                </div>
+                            </a>
+                            <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item">
+                                <div class="d-flex align-items-center">
+                                    <img class="rounded-circle" src="{% static 'main/img/user.jpg'%}" alt="" style="width: 40px; height: 40px;">
+                                    <div class="ms-2">
+                                        <h6 class="fw-normal mb-0">Jhon send you a message</h6>
+                                        <small>15 minutes ago</small>
+                                    </div>
+                                </div>
+                            </a>
+                            <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item">
+                                <div class="d-flex align-items-center">
+                                    <img class="rounded-circle" src="{% static 'main/img/user.jpg'%}" alt="" style="width: 40px; height: 40px;">
+                                    <div class="ms-2">
+                                        <h6 class="fw-normal mb-0">Jhon send you a message</h6>
+                                        <small>15 minutes ago</small>
+                                    </div>
+                                </div>
+                            </a>
+                            <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item text-center">See all message</a>
+                        </div>
                     </div>
-                    
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                             <i class="fa fa-bell me-lg-2"></i>
@@ -139,7 +170,7 @@
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                             <img class="rounded-circle me-lg-2" src="{% static 'main/img/user.jpg'%}" alt="" style="width: 40px; height: 40px;">
-                            <span class="d-none d-lg-inline-flex">saleeja S</span>
+                            <span class="d-none d-lg-inline-flex">John Doe</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                             <a href="#" class="dropdown-item">My Profile</a>
@@ -152,73 +183,53 @@
                     </div>
                 </div>
             </nav>
-<!-- <section class="ftco-section bg-light">
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-9 pr-lg-4">
-						<div class="row">
-							<div class="col-md-12 ftco-animate">
-		            <div class="job-post-item p-4 d-block d-lg-flex align-items-center">
-		              <div class="one-third mb-4 mb-md-0">
-		                <div class="job-post-item-header align-items-center">
-		                	<span class="subadge">Partime</span>
-		                  <h2 class="mr-3 text-black"><a href="#">Frontend Development</a></h2>
-		                </div>
-		                <div class="job-post-item-body d-block d-md-flex">
-		                  <div class="mr-3"><span class="icon-layers"></span> <a href="#">Facebook, Inc.</a></div>
-		                  <div><span class="icon-my_location"></span> <span>Western City, UK</span></div>
-		                </div>
-		              </div>
 
-		              <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
-		              	<div>
-			                <a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
-			                	<span class="icon-heart"></span>
-			                </a>
-		                </div>
-		                <a href="job-single.html" class="btn btn-primary py-2">Apply Job</a>
-		              </div>
-		            </div>
-		          </div> -->
-                
-                
-                
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-sm-6 col-xl-3">
+                        <a href="{% url 'create_job' %}">
+                            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                                <div class="ms-3">
+                                    <h6 class="mb-0">Post job</h6>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-sm-6 col-xl-3">
+                        <a href="{% url 'job_list' %}">
+                            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                                <div class="ms-3">
+                                    <h6 class="mb-0">Posted Jobs</h6>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                            <div class="ms-3">
+                                <h6 class="mb-0">notifications</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Navbar End -->
 
-            <div class="container mt-4">
-                {% if job_listings %}
-                    <ul>
-                        {% for job in job_listings %}
-                            <li>   
-                                <h3>{{ job.title }}</h3>
-                                <p>Description: {{ job.description }}</p>
-                                <p>required_qualifications: {{ job.required_qualifications }}</p>
-                                <p>desired_qualifications: {{ job.desired_qualifications }}</p>
-                                <p>application_deadline: {{ job.application_deadline }}</p>
-                                <p>responsibilities: {{ job.responsibilities }}</p>
-                                <p>location: {{ job.location }}</p>
-                                <p>job_type: {{ job.job_type }}</p>
-                                <p>company_benefits: {{ job.company_benefits }}</p>
-                                <p>how_to_apply: {{ job.how_to_apply }}</p>
-                                <p>Salary Range: {{ job.salary_range }}</p>
-                                <form method="post" action="{% url 'apply_to_job' job.id %}">
-                                    {% csrf_token %}
-                                    <button type="submit">Apply for Job</button>
-                                </form>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    <p>No job listings available</p>
-                {% endif %}
-            </div>  
-            
-            
-            
-            
-            
-                 
-            
 
+            <!-- Sale & Revenue Start -->
+            <!-- <div class="container-fluid pt-4 px-4">
+                
+            </div>
+
+
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    
+                    
+            </div> -->
+            <!-- Footer End -->
+        </div>
+        <!-- Content End -->
 
 
         <!-- Back to Top -->
@@ -245,8 +256,11 @@
         function submitForm() {
             document.getElementById('logout-form').submit();
         }
-    </script>   
-    
+    </script>
+    <!-- Add this to your HTML template -->
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 </body>
 
 </html>
