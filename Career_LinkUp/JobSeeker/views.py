@@ -174,6 +174,7 @@ def job_list_applicant(request):
 
 
 def apply_job(request, job_id):
+    
     job = get_object_or_404(JobListing, id=job_id)
     if request.method == 'POST':
         form = JobApplicationForm(request.POST, request.FILES)
@@ -182,11 +183,13 @@ def apply_job(request, job_id):
             application.job = job
             application.save()
             messages.success(request, 'Application submitted successfully!')
-            time.sleep(1) 
-            return HttpResponseRedirect(reverse_lazy('main_seeker'))
+            time.sleep(2)
+            return redirect('main_page')
     else:
         form = JobApplicationForm()
-    return render(request, 'JobSeeker/apply_to_job.html', {'form': form, 'job': job})
+    return render(request, 'JobSeeker/apply_to_job.html', {'form': form, 'job': job })
+def main_page(request):
+    return render (request,'JobSeeker/main.html')
 
 def job_applications(request):
     applications = JobApplication.objects.all()
@@ -201,18 +204,26 @@ def applied_job_list(request):
     return render(request, 'JobSeeker/job_list_applicant.html', {'user_applications': user_applications})
 
 
-from .forms import JobSearchForm
+# views.py
+from django.db.models import Q
+from .models import JobListing
 
 def job_search(request):
-    if request.method == 'POST':
-        form = JobSearchForm(request.POST)
-        if form.is_valid():
-            search_query = form.cleaned_data['search_query']
-            # Perform job search based on search query
-            job_listings = JobListing.objects.filter(title__icontains=search_query)
-            return render(request, 'JobSeeker/main.html', {'job_listings': job_listings, 'search_query': search_query})
+    query = request.GET.get('query')
+    if query:
+        job_listing = JobListing.objects.filter(
+            Q(title__icontains=query) |
+            Q(location__icontains=query) |
+            Q(company__name__icontains=query) |  # Assuming 'company' is a ForeignKey to CompanyProfile with a 'name' field
+            Q(created_at__icontains=query) |     # Assuming 'created_at' is a DateTimeField
+            Q(job_type__icontains=query)
+        )
     else:
-        form = JobSearchForm()
-    return render(request, 'JobSeeker/main.html', {'form': form})
+        job_listing = JobListing.objects.all()
+    return render(request, 'JobSeeker/job_search_list.html', {'job_listing': job_listing, 'query': query})
+
+
+# views.py
+
 
 

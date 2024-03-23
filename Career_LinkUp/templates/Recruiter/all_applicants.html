@@ -51,24 +51,47 @@
         .update-button:hover {
             background-color: #0056b3;
         }
+        /* Fixed size for cover letter cell */
+        .cover-letter-cell {
+            width: 90px; /* Adjust the width as needed */
+            max-width: 450px; /* Adjust the height as needed */
+            max-height: 100px; 
+            overflow: hidden; /* Hide overflow content */
+            position: relative; /* Position for read more link */
+        }
+        .full-cover-letter {
+            display: none; /* Initially hide full cover letter content */
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: white;
+            padding: 8px;
+            border: 1px solid #ddd;
+            z-index: 1;
+        }
+        .read-more {
+            color: blue;
+            cursor: pointer;
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-	    <div class="container-fluid px-md-4	">
-	      <a class="navbar-brand" href="index.html">CareerLinkUp</a>
-	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-	        <span class="oi oi-menu"></span> Menu
-	      </button>
+        <div class="container-fluid px-md-4 ">
+          <a class="navbar-brand" href="index.html">CareerLinkUp</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="oi oi-menu"></span> Menu
+          </button>
 
-	      <div class="collapse navbar-collapse justify-content-end" id="ftco-nav">
+          <div class="collapse navbar-collapse justify-content-end" id="ftco-nav">
             <ul class="navbar-nav">
                 <li class="nav-item"><a href="{% url 'main_comp' %}" class="nav-link">Back to Home</a></li>
             </ul>
         </div>
         
-	    </div>
-	  </nav>
+        </div>
+      </nav>
     <table>
         <thead>
             <tr>
@@ -84,8 +107,10 @@
             {% for application in job_applications %}
             <tr>
                 <td>{{ application.applicant_email }}</td>
-                <td><a href="{{ application.resume.url }}">Download Resume</a></td>
-                <td>{{ application.cover_letter }}</td>
+                <td><a href="{{ application.resume.url }}" target="_blank">Download Resume</a></td>
+                <td class="cover-letter-cell">
+                    <div class="cover-letter-content">{{ application.cover_letter }}</div>
+                </td>
                 <td>{{ application.date_applied }}</td>
                 <td>{{ application.status }}</td>
                 <td>
@@ -104,5 +129,8 @@
             {% endfor %}
         </tbody>
     </table>
+
+    
 </body>
 </html>
+

@@ -3,14 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <title>Applied Jobs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+        select {
+            padding: 5px;
+            border-radius: 3px;
+        }
+        button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <h1>Applied Jobs</h1>
     <ul>
         {% for application in applications %}
             <li>
-                {{ application.job.title }} - Application Date: {{ application.date_applied }}<br>
-                Status:
+                <strong>{{ application.job.title }}</strong> - Application Date: {{ application.date_applied }}<br>
+                <strong>Status:</strong>
                 <form method="POST" action="{% url 'update_status' application.id %}">
                     {% csrf_token %}
                     <select name="status">
@@ -26,4 +63,5 @@
     </ul>
 </body>
 </html>
+
 

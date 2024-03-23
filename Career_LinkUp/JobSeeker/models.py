@@ -90,4 +90,3 @@ class JobApplication(models.Model):
     def __str__(self):
         return f"{self.applicant.username}'s application for {self.job.title}"
     
-

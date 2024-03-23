@@ -2,15 +2,70 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Job Listings</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            padding: 20px;
+        }
+        .job-list {
+            list-style: none;
+            padding: 0;
+        }
+        .job-item {
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+        .job-item h3 {
+            margin-top: 0;
+        }
+        .job-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        .btn-create-job {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Job Listings</h1>
-    <ul>
-        {% for job in jobs %}
-            <li>{{ job.title }} - <a href="{% url 'edit_job' job.id %}">Edit</a> | <a href="{% url 'delete_job' job.id %}">Delete</a></li>
-        {% endfor %}
-    </ul>
-    <button><a href="{% url 'create_job' %}">Create New Job</a></button>
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+        <div class="container-fluid px-md-4 ">
+          <a class="navbar-brand" href="index.html">CareerLinkUp</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="oi oi-menu"></span> Menu
+          </button>
+
+          <div class="collapse navbar-collapse justify-content-end" id="ftco-nav">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a href="{% url 'main_comp' %}" class="nav-link">Back to Home</a></li>
+            </ul>
+        </div>
+        
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Job Listings</h1>
+        <ul class="job-list">
+            {% for job in jobs %}
+                <li class="job-item">
+                    <h3>{{ job.title }}</h3>
+                    <p>{{ job.description }}</p>
+                    <div class="job-links">
+                        <a href="{% url 'edit_job' job.id %}" class="btn btn-primary">Edit</a>
+                        <a href="{% url 'delete_job' job.id %}" class="btn btn-danger">Delete</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'create_job' %}" class="btn btn-success btn-create-job">Create New Job</a>
+    </div>
 </body>
 </html>
+

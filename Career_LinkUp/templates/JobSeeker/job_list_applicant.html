@@ -1,11 +1,58 @@
-<!-- job_list_applicant.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Applied Jobs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #007bff; /* Blue color */
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #007bff; /* Blue color */
+            margin-top: 0;
+        }
+
+        p {
+            margin: 10px 0;
+        }
+
+        .status {
+            font-weight: bold;
+            background-color: #f0f0f0;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        .no-jobs {
+            text-align: center;
+            color: #666;
+        }
+    </style>
 </head>
 <body>
     <h1>Applied Jobs</h1>
@@ -15,13 +62,13 @@
                 <li>
                     <h2>{{ application.job.title }}</h2>
                     <p>Application Date: {{ application.applied_at }}</p>
-                    <p>Status: {{ application.status }}</p>
+                    <p>Status: <span class="status">{{ application.status }}</span></p>
                     <!-- Add more details about each application as needed -->
                 </li>
             {% endfor %}
         </ul>
     {% else %}
-        <p>No jobs applied</p>
+        <p class="no-jobs">No jobs applied</p>
     {% endif %}
 </body>
 </html>

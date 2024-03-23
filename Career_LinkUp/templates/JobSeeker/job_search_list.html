@@ -1,0 +1,27 @@
+<div class="container mt-4">
+    {% if job_listing %}
+        {% for job in job_listing %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h5 class="card-title">{{ job.title }}</h5>
+                            <p class="card-text"><strong>Location:</strong> {{ job.location }}</p>
+                            <p class="card-text"><strong>Job Type:</strong> {{ job.job_type }}</p>
+                            <p class="card-text"><strong>Job Type:</strong> {{ job.application_deadline  }}</p>
+                        </div>
+                        <div class="col-md-4 text-right d-flex align-items-center justify-content-end">
+                            <form method="post" action="{% url 'apply_to_job' job.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary">Apply for Job</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No job listings available</p>
+    {% endif %}
+</div>
+

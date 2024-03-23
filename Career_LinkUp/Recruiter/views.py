@@ -23,7 +23,7 @@ def edit_job(request, job_id):
         form = JobForm(request.POST, instance=job)
         if form.is_valid():
             form.save()
-            return redirect('job_list') 
+            return redirect('joblist_com') 
     else:
         form = JobForm(instance=job)
     return render(request, 'Recruiter/edit_job.html', {'form': form, 'job': job})
@@ -61,7 +61,51 @@ def update_application_status(request, application_id):
 
 
 
+# views.py
 
+from django.http import FileResponse, Http404
+from django.conf import settings
+import os
+
+def serve_resume(request, resume_path):
+    # Construct the absolute file path to the resume
+    resume_file_path = os.path.join(settings.MEDIA_ROOT, resume_path)
+    
+    # Check if the file exists
+    if os.path.exists(resume_file_path):
+        # Open the file in binary read mode and serve it as a FileResponse
+        return FileResponse(open(resume_file_path, 'rb'), content_type='application/pdf')
+    else:
+        # Raise a 404 error if the file doesn't exist
+        raise Http404("Resume not found")
+
+
+# views.py
+
+# views.py
+
+# from django.http import HttpResponse
+# from django.shortcuts import get_object_or_404
+# from JobSeeker.models import JobApplication
+# import os
+
+# # views.py
+
+# from django.http import HttpResponse
+# from django.shortcuts import get_object_or_404
+# from .models import JobApplication
+
+# def download_resume(request, application_id):
+#     application = get_object_or_404(JobApplication, pk=application_id)
+
+#     # Retrieve the resume file
+#     resume_file = application.resume
+
+#     # Set up the response
+#     response = HttpResponse(resume_file, content_type='application/force-download')
+#     response['Content-Disposition'] = f'attachment; filename="{resume_file.name}"'
+
+#     return response
 
 
 
