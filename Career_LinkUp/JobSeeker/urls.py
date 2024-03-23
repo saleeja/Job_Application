@@ -11,7 +11,6 @@ urlpatterns = [
     path('profile/edit/', views.edit_profile, name='profile_edit'),
     path("main_seeker/",views.main_seeker,name='main_seeker'),
     path("main_page/",views.main_page,name='main_page'),
-
     path('logout_view/',views.logout_view,name='logout_view'),
     path('create_company_profile/', views.create_company_profile, name='create_company_profile'),
     path('com_profile_detail/', views.com_profile_detail, name='com_profile_detail'),
@@ -28,9 +27,6 @@ urlpatterns = [
     path('create_profile/<str:user_type>/', views.create_profile, name='create_profile'),
     path('job/search/', views.job_search, name='job_search')
 
-
-
-    # path('create/job_seeker/', views.create_job_seeker_profile, name='create_job_seeker_profile'),
-    # path('create/company/', views.create_company_profile, name='create_company_profile'),
+  
 
 ]

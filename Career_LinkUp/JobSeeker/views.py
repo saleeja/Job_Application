@@ -9,9 +9,10 @@ from Recruiter.models import JobListing
 from django.urls import reverse
 from Recruiter.views import main_comp,job_list_com
 from django.http import HttpResponseRedirect
-from django.urls import reverse_lazy
 import time
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
+
 
 
 def index(request):
@@ -204,26 +205,24 @@ def applied_job_list(request):
     return render(request, 'JobSeeker/job_list_applicant.html', {'user_applications': user_applications})
 
 
-# views.py
-from django.db.models import Q
-from .models import JobListing
-
 def job_search(request):
     query = request.GET.get('query')
     if query:
         job_listing = JobListing.objects.filter(
             Q(title__icontains=query) |
             Q(location__icontains=query) |
-            Q(company__name__icontains=query) |  # Assuming 'company' is a ForeignKey to CompanyProfile with a 'name' field
-            Q(created_at__icontains=query) |     # Assuming 'created_at' is a DateTimeField
+            Q(company__name__icontains=query) |  
+            Q(created_at__icontains=query) |    
             Q(job_type__icontains=query)
         )
+        return render(request, 'JobSeeker/job_search_list.html', {'job_listing': job_listing, 'query': query})
     else:
-        job_listing = JobListing.objects.all()
-    return render(request, 'JobSeeker/job_search_list.html', {'job_listing': job_listing, 'query': query})
+        return redirect('job_list')  
 
 
-# views.py
+
+
+
 
 
 
