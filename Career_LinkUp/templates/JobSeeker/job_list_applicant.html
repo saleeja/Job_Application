@@ -1,0 +1,27 @@
+<!-- job_list_applicant.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applied Jobs</title>
+</head>
+<body>
+    <h1>Applied Jobs</h1>
+    {% if user_applications %}
+        <ul>
+            {% for application in user_applications %}
+                <li>
+                    <h2>{{ application.job.title }}</h2>
+                    <p>Application Date: {{ application.applied_at }}</p>
+                    <p>Status: {{ application.status }}</p>
+                    <!-- Add more details about each application as needed -->
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No jobs applied</p>
+    {% endif %}
+</body>
+</html>

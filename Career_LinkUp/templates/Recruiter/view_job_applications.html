@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Job Applications</title>
+</head>
+<body>
+    <h1>Job Applications</h1>
+    <ul>
+        {% for application in job_applications %}
+            <li>
+                <strong>Job Seeker: </strong>{{ application.job_seeker.username }}<br>
+                <strong>Cover Letter: </strong>{{ application.cover_letter }}<br>
+                <strong>Resume: </strong><a href="{{ application.resume.url }}">Download</a><br>
+                <strong>Status: </strong>{{ application.status }}<br>
+                <form action="{% url 'update_application_status' application.id %}" method="post">
+                    {% csrf_token %}
+                    <label for="status">Update Status:</label>
+                    <select name="status" id="status">
+                        <option value="Pending" {% if application.status == "Pending" %} selected {% endif %}>Pending</option>
+                        <option value="Reviewed" {% if application.status == "Reviewed" %} selected {% endif %}>Reviewed</option>
+                        <option value="Accepted" {% if application.status == "Accepted" %} selected {% endif %}>Accepted</option>
+                        <option value="Rejected" {% if application.status == "Rejected" %} selected {% endif %}>Rejected</option>
+                    </select>
+                    <button type="submit">Update</button>
+                </form>
+            </li>
+        {% empty %}
+            <li>No job applications found.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

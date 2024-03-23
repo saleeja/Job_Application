@@ -18,16 +18,10 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.username
     
-    # def is_job_seeker(self):
-    #     return self.user_type == self.JOB_SEEKER
-
-    # def is_recruiter(self):
-    #     return self.user_type == self.RECRUITER
     
     class Meta:
         swappable = 'AUTH_USER_MODEL'
 
-    # Provide unique related_name for groups and user_permissions
     groups = models.ManyToManyField(Group, verbose_name=('groups'), blank=True, related_name='customuser_set')
     user_permissions = models.ManyToManyField(Permission, verbose_name=('user permissions'), blank=True, related_name='customuser_set')
  
@@ -90,7 +84,8 @@ class JobApplication(models.Model):
     resume = models.FileField(upload_to='resumes/')
     cover_letter = models.TextField()
     applied_at = models.DateTimeField(default=timezone.now)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
+    date_applied = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
 
     def __str__(self):
         return f"{self.applicant.username}'s application for {self.job.title}"

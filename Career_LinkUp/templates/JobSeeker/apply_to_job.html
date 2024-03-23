@@ -1,18 +1,40 @@
-<!-- apply_to_job.html in the templates folder of the job_seeker app -->
+<!-- apply_to_job.html -->
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Apply to Job</title>
+    <!-- Include SweetAlert CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 </head>
 <body>
     
     <h1>Apply to {{ job.title }}</h1>
-    <form method="post" enctype="multipart/form-data">
+    <form id="job_application_form" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Submit Application</button>
     </form>
+
+    <!-- Include SweetAlert JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <script>
+        // Add event listener for form submission
+        document.getElementById("job_application_form").addEventListener("submit", function(event) {
+            // Display sweet alert
+            Swal.fire({
+                icon: 'success',
+                title: 'Application Submitted Successfully!',
+                showConfirmButton: false,
+                timer: 1500
+            }).then(() => {
+                // Redirect to main page after alert is closed
+                window.location.href = "{% url 'main_seeker' %}";
+            });
+        });
+    </script>
 </body>
 </html>
+

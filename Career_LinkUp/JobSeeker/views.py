@@ -1,16 +1,23 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
-from .forms import RegistrationForm
 from django.contrib import messages
-from .models import JoobseekerProfile,CompanyProfile
-from .forms import ProfileForm,CompanyProfileForm,ApplyJobForm
+from .models import JoobseekerProfile,CompanyProfile,JobApplication
+from .forms import ProfileForm,CompanyProfileForm,ApplyJobForm,JobApplicationForm,RegistrationForm
+from django.core.exceptions import ObjectDoesNotExist
+from Recruiter.models import JobListing
 from django.urls import reverse
 from Recruiter.views import main_comp,job_list_com
+from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy
+import time
+from django.shortcuts import get_object_or_404
+
 
 def index(request):
     return render(request, "index.html")
 
+# Registration
 def user_register(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
@@ -21,6 +28,7 @@ def user_register(request):
         form = RegistrationForm()
     return render(request, 'JobSeeker/candidate_register.html', {'form': form})
 
+# user_login
 def user_login(request):
     if request.method == 'POST':
         email_or_username = request.POST['email_or_username']
@@ -38,8 +46,7 @@ def user_login(request):
         messages.error(request, 'Invalid email/username or password. Please try again.')
     return render(request, 'JobSeeker/loginpage.html')
 
-
-from .models import JoobseekerProfile  
+# profile_creation
 def create_profile(request):
     try:
         profile = request.user.joobseekerprofile  
@@ -57,7 +64,6 @@ def create_profile(request):
         return render(request, 'JobSeeker/profile_form.html', {'form': form})
 
 
-
 def update_profile(request):
     profile = JoobseekerProfile.objects.get(user=request.user)
     if request.method == 'POST':
@@ -69,7 +75,6 @@ def update_profile(request):
         form = ProfileForm(instance=profile)
     return render(request, 'JobSeeker/profile_form.html', {'form': form})
 
-from django.core.exceptions import ObjectDoesNotExist
 def profile_detail(request):
     try:
         profile = JoobseekerProfile.objects.get(user=request.user)
@@ -153,37 +158,47 @@ def logout_view(request):
     # return render(request, 'JobSeeker/logout.html')
 
 
-from django.shortcuts import render
-from Recruiter.models import JobListing
-from django.http import JsonResponse
-
-
 def job_list(request):
     job_listings = JobListing.objects.all()
     context = {
         'job_listings': job_listings
     }
 
-    # Render the template with the context data
-    return render(request, 'JobSeeker/main.html', context)  # Fetch all job listings
+    return render(request, 'JobSeeker/main.html', context) 
 
-# views.py in the job_seeker app
 
-from django.shortcuts import render, redirect
-from .forms import JobApplicationForm
 
-def apply_to_job(request, job_id):
-    job = JobListing.objects.get(id=job_id)
+def job_list_applicant(request):
+    jobs = JobListing.objects.all()
+    return render(request, 'JobSeeker/job_list_applicant.html', {'jobs': jobs})
+
+
+def apply_job(request, job_id):
+    job = get_object_or_404(JobListing, id=job_id)
     if request.method == 'POST':
         form = JobApplicationForm(request.POST, request.FILES)
         if form.is_valid():
-            job_application = form.save(commit=False)
-            job_application.job = job
-            job_application.save()
-            return redirect('job_list')  # Redirect to job listings page
+            application = form.save(commit=False)
+            application.job = job
+            application.save()
+            messages.success(request, 'Application submitted successfully!')
+            time.sleep(1) 
+            return HttpResponseRedirect(reverse_lazy('main_seeker'))
     else:
         form = JobApplicationForm()
     return render(request, 'JobSeeker/apply_to_job.html', {'form': form, 'job': job})
+
+def job_applications(request):
+    applications = JobApplication.objects.all()
+    return render(request, 'JobSeeker/job_applications.html', {'applications': applications})
+
+def application_status(request, application_id):
+    application = get_object_or_404(JobApplication, id=application_id)
+    return render(request, 'JobSeeker/application_status.html', {'application': application})
+
+def applied_job_list(request):
+    user_applications = JobApplication.objects.filter(applicant=request.user)
+    return render(request, 'JobSeeker/job_list_applicant.html', {'user_applications': user_applications})
 
 
 from .forms import JobSearchForm
@@ -200,13 +215,4 @@ def job_search(request):
         form = JobSearchForm()
     return render(request, 'JobSeeker/main.html', {'form': form})
 
-# views.py
 
-from django.shortcuts import render
-from .models import JobApplication
-
-def job_application_status(request):
-    # Get job applications submitted by the logged-in job seeker
-    job_applications = JobApplication.objects.filter(applicant=request.user)
-
-    return render(request, 'job_seeker/application_status.html', {'job_applications': job_applications})

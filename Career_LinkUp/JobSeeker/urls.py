@@ -16,9 +16,12 @@ urlpatterns = [
     path('com_update_profile/', views.com_update_profile, name='com_update_profile'),
     path('com_edit_profile/', views.com_edit_profile, name='com_edit_profile'),
     path('job_list/', views.job_list, name='job_list'),
-    path('apply-to-job/<int:job_id>/', views.apply_to_job, name='apply_to_job'),
     path('job_search/', views.job_search, name='job_search'),
-    path('job_application_status/', views.job_application_status, name='job_application_status'),
-
+    path('applied_job_list/',views.applied_job_list, name='applied_job_list'),
+    path('job_list/', views.job_list_com, name='job_list'),
+    path('apply_to_job/<int:job_id>/', views.apply_job, name='apply_to_job'),
+    path('job_applications/', views.job_applications, name='job_applications'),
+    path('job_application_status/<int:application_id>/', views.application_status, name='job_application_status'),
+    # path('', views.main_comp, name='main_comp'),
 
 ]

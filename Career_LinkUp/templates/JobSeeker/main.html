@@ -106,11 +106,15 @@
     
                 <div class="navbar-nav align-items-center ms-auto">
                     <div class="nav-item dropdown">
-                        <a href="{% url 'job_application_status' %}" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                             <i class="fa fa-envelope me-lg-2"></i>
                             <span class="d-none d-lg-inline-flex">Applied Jobs</span>
                         </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="{% url 'applied_job_list' %}">View Application Status</a>
+                        </div>
                     </div>
+                    
                     
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">

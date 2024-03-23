@@ -1,7 +1,7 @@
 import re
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import CustomUser
+from .models import CustomUser,JoobseekerProfile,CompanyProfile,JobApplication
 from django.contrib.auth import password_validation
 
 def validate_email(value):
@@ -42,15 +42,11 @@ class RegistrationForm(UserCreationForm):
         fields = ['full_name', 'username', 'email', 'password1', 'password2', 'user_type']
 
 
-
-from .models import JoobseekerProfile
-
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = JoobseekerProfile
         fields = '__all__' 
 
-from .models import CompanyProfile
 
 class CompanyProfileForm(forms.ModelForm):
     class Meta:
@@ -58,23 +54,15 @@ class CompanyProfileForm(forms.ModelForm):
         fields = ['name', 'description', 'location', 'industry', 'website', 'logo']
 
 
-from .models import JobApplication
-
 class ApplyJobForm(forms.ModelForm):
     class Meta:
         model = JobApplication
         fields = ['resume']
 
-# forms.py in the job_seeker app
-
-from django import forms
-from .models import JobApplication
-
 class JobApplicationForm(forms.ModelForm):
     class Meta:
         model = JobApplication
-        fields = ['applicant', 'resume', 'cover_letter']
-
+        fields = ['applicant','applicant_email', 'resume', 'cover_letter']
 
 class JobSearchForm(forms.Form):
     search_query = forms.CharField(label='Search Jobs', max_length=100)

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Your Job Applications</h1>
+    <ul>
+    {% for job_application in job_applications %}
+        <li>
+            <p>Resume: {{ job_application.resume }}</p>
+            <p>Cover Letter: {{ job_application.cover_letter }}</p>
+            <p>Status: {{ job_application.status }}</p>
+            <button onclick="updateStatus('{{ job_application.id }}')">Update Status</button>
+        </li>
+    {% endfor %}
+    </ul>
+
+    <form id="updateForm" method="post" style="display: none;">
+        {% csrf_token %}
+        <label for="status">Status:</label>
+        <select name="status" id="status">
+            <option value="Pending">Pending</option>
+            <option value="Accepted">Accepted</option>
+            <option value="Rejected">Rejected</option>
+            <!-- Add other status options as needed -->
+        </select>
+        <button type="submit">Update</button>
+    </form>
+
+    <p id="updateMessage" style="display: none; color: green;">Status successfully updated.</p>
+
+    <script>
+        function updateStatus(applicationId) {
+            // Show the update form
+            document.getElementById('updateForm').style.display = 'block';
+            // Set the form action to include the application id
+            document.getElementById('updateForm').action = "{% url 'update_application_status' 0 %}".replace('0', applicationId);
+        }
+
+        document.getElementById('updateForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            // Perform AJAX request to update status
+            let formData = new FormData(this);
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest', // Add header to identify AJAX request
+                    'X-CSRFToken': formData.get('csrfmiddlewaretoken') // Add CSRF token
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Hide the update form after successful update
+                    document.getElementById('updateForm').style.display = 'none';
+                    // Show success message
+                    document.getElementById('updateMessage').style.display = 'block';
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>

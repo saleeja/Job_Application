@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Applied Jobs</title>
+</head>
+<body>
+    <h1>Applied Jobs</h1>
+    <ul>
+        {% for application in applications %}
+            <li>
+                {{ application.job.title }} - Application Date: {{ application.date_applied }}<br>
+                Status:
+                <form method="POST" action="{% url 'update_status' application.id %}">
+                    {% csrf_token %}
+                    <select name="status">
+                        <option value="Pending" {% if application.status == "Pending" %} selected {% endif %}>Pending</option>
+                        <option value="Reviewed" {% if application.status == "Reviewed" %} selected {% endif %}>Reviewed</option>
+                        <option value="Accepted" {% if application.status == "Accepted" %} selected {% endif %}>Accepted</option>
+                        <option value="Rejected" {% if application.status == "Rejected" %} selected {% endif %}>Rejected</option>
+                    </select>
+                    <button type="submit">Update</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+

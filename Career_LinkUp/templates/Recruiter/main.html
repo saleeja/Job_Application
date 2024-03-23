@@ -196,7 +196,7 @@
                         </a>
                     </div>
                     <div class="col-sm-6 col-xl-3">
-                        <a href="{% url 'job_list' %}">
+                        <a href="{% url 'joblist_com' %}">
                             <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                                 <div class="ms-3">
                                     <h6 class="mb-0">Posted Jobs</h6>
@@ -205,31 +205,48 @@
                         </a>
                     </div>
                     <div class="col-sm-6 col-xl-3">
-                        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                            <div class="ms-3">
-                                <h6 class="mb-0">notifications</h6>
+                        <a href="{% url 'view_all_applicants' %}">
+                            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                                <div class="ms-3">
+                                    <h6 class="mb-0">Job Applicants</h6>
+                                </div>
                             </div>
-                        </div>
+                        </a>    
                     </div>
                 </div>
             </div>
             <!-- Navbar End -->
-
-
-            <!-- Sale & Revenue Start -->
-            <!-- <div class="container-fluid pt-4 px-4">
+            <div class="container-fluid pt-4 px-4">
                 
             </div>
 
 
-            <div class="container-fluid pt-4 px-4">
+            <!-- <div class="container-fluid pt-4 px-4">
                 <div class="row g-4">
+                    {% for job_application in job_applications %}
+                        <div>
+                            <h2>Job Title: {{ job_application.job_title }}</h2>
+                            <p>Applicant: {{ job_application.applicant.username }}</p>
+                            <p>Status: {{ job_application.status }}</p>
+                            <form method="post" action="{% url 'update_status' job_application.id %}">
+                                {% csrf_token %}
+                                <label for="status">Update Status:</label>
+                                <select name="status" id="status">
+                                    <option value="Pending">Pending</option>
+                                    <option value="Accepted">Accepted</option>
+                                    <option value="Rejected">Rejected</option>
+                                    <!-- Add more status options as needed -->
+                                <!-- </select>
+                                <button type="submit">Review</button>
+                            </form>
+                        </div>
+                    {% endfor %}
+                     --> -->
                     
-                    
-            </div> -->
+                </div>
             <!-- Footer End -->
-        </div>
-        <!-- Content End -->
+            </div>
+        </div><!-- Content End -->
 
 
         <!-- Back to Top -->
