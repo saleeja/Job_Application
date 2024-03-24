@@ -40,7 +40,11 @@ class RegistrationForm(UserCreationForm):
     class Meta:
         model = CustomUser
         fields = ['full_name', 'username', 'email', 'password1', 'password2', 'user_type']
-
+    # def clean_email(self):
+    #     email = self.cleaned_data.get('email')
+    #     if CustomUser.objects.filter(email=email).exists():
+    #         raise forms.ValidationError("This email is already registered. Please use a different one.")
+    #     return email
 
 class ProfileForm(forms.ModelForm):
     class Meta:
@@ -67,3 +71,9 @@ class JobApplicationForm(forms.ModelForm):
 class JobSearchForm(forms.Form):
     search_query = forms.CharField(label='Search Jobs', max_length=100)
 
+# forms.py
+
+from django import forms
+
+class OTPVerificationForm(forms.Form):
+    otp = forms.CharField(label='Enter OTP', max_length=6)

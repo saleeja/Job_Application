@@ -13,12 +13,10 @@ class CustomUser(AbstractUser):
     )
     user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES)
     full_name = models.CharField(max_length=150)
-    
+    is_verified = models.BooleanField(default=False)
+    otp = models.CharField(max_length=6, blank=True, null=True)
 
-    def __str__(self):
-        return self.username
-    
-    
+      
     class Meta:
         swappable = 'AUTH_USER_MODEL'
 

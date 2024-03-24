@@ -1,0 +1,60 @@
+<!-- admin_dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+</head>
+<body>
+    <h1>Welcome to the Admin Dashboard</h1>
+
+    <h2>Recent Log Entries</h2>
+    <ul>
+        {% for log in recent_logs %}
+            <li>{{ log.action_time }} - {{ log.user }}: {{ log.object_repr }} ({{ log.action_flag }})</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Add more sections and data as needed -->
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+<!-- admin_login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+</head>
+<body>
+    <h1>Admin Login</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" name="username" id="username">
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" name="password" id="password">
+        </div>
+        <button type="submit">Login</button>
+    </form>
+    {% if messages %}
+        {% for message in messages %}
+            <div>{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+</body>
+</html>

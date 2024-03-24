@@ -105,13 +105,61 @@
                           </div>
                         
                       </form>
-       -->
+       -->            
 
-                      <form method="POST">
+                      <!-- <form method="POST">
                           {% csrf_token %}
                           {{ form.as_p }}
                           <input type="submit" value="Submit">
-                      </form>
+                      </form> -->
+
+<!-- 
+                      <form method="post" id="registration-form">
+                        {% csrf_token %}
+                        <label for="full_name">Full Name:</label><br>
+                        <input type="text" id="full_name" name="full_name" required><br>
+                
+                        <label for="username">Username:</label><br>
+                        <input type="text" id="username" name="username" required><br>
+                
+                        <label for="email">Email:</label><br>
+                        <input type="email" id="email" name="email" required><br>
+
+                        <button id="otp-verification-btn">Verify Email with OTP</button>
+                
+                        <label for="password1">Password:</label><br>
+                        <input type="password" id="password1" name="password1" required><br>
+                
+                        <label for="password2">Confirm Password:</label><br>
+                        <input type="password" id="password2" name="password2" required><br>
+                
+                        <label for="user_type">User Type:</label><br>
+                        <select id="user_type" name="user_type">
+                            <option value="job_seeker">Job Seeker</option>
+                            <option value="employer">Employer/Recruiter</option>
+                        </select><br>
+                
+                        <button type="submit">Register</button>
+                    </form> -->
+                
+                    <!-- Button for OTP Verification -->
+                    
+                    
+                    {% if messages %}
+                        {% for message in messages %}
+                            <p style="color: red">{{ message }}</p>
+                        {% endfor %}
+                    {% endif %}
+                    <form action="{% url 'register' %}" method="POST">
+                        {% csrf_token %}
+                        {{ form }}
+                        <input type="submit" value="Submit">
+                    </form>
+
+
+
+
+
                     </div>
                     <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
       
@@ -126,7 +174,15 @@
           </div>
         </div>
       </section>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Add event listener to OTP verification button
+      document.getElementById("otp-verification-btn").addEventListener("click", function() {
+          document.getElementById("registration-form").submit(); // Submit the registration form
+          // Redirect to OTP verification page
+          window.location.href = "{% url 'otp_verification' %}";
+      });
+    </script>
 
 </body>
 </html>

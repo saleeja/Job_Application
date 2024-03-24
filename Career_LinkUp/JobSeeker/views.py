@@ -3,38 +3,77 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .models import JoobseekerProfile,CompanyProfile,JobApplication
-from .forms import ProfileForm,CompanyProfileForm,ApplyJobForm,JobApplicationForm,RegistrationForm
+from .forms import ProfileForm,CompanyProfileForm,JobApplicationForm,RegistrationForm
 from django.core.exceptions import ObjectDoesNotExist
 from Recruiter.models import JobListing
-from django.urls import reverse
 from Recruiter.views import main_comp,job_list_com
-from django.http import HttpResponseRedirect
 import time
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
+from django.core.mail import send_mail
+from django.conf import settings
+from .forms import RegistrationForm
+from django.utils.crypto import get_random_string
+from django.db import IntegrityError
+from django.contrib.auth import get_user_model
+
+
+def user_register(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            try:
+                user = form.save(commit=False) 
+                user.username = form.cleaned_data['username']  
+                user.set_password(form.cleaned_data['password1'])  
+                user.save()
+
+                # Generate OTP and send email
+                otp = get_random_string(length=6, allowed_chars='1234567890')
+                subject = 'Email Verification OTP'
+                message = f'Your OTP is: {otp}'
+                send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email], fail_silently=False)
+
+                # Store OTP and email in session for verification
+                request.session['otp'] = otp
+                request.session['email'] = user.email
+
+                # Redirect to verify email page
+                return redirect('otp_verification')
+            except IntegrityError:
+                form.add_error('email', 'Email address already in use. Please try another one.')
+    else:
+        form = RegistrationForm()
+    return render(request, 'JobSeeker/candidate_register.html', {'form': form})
+
+
+
+def otp_verification(request):
+    if request.method == 'POST':
+        entered_otp = request.POST.get('otp')
+        expected_otp = request.session.get('otp')
+
+        if entered_otp == expected_otp:
+            # OTP verification successful
+            messages.success(request, 'Email verified successfully. You can now login.')
+            del request.session['otp']
+            return redirect('loginpage')
+        else:
+            # OTP verification failed
+            messages.error(request, 'Invalid OTP. Please try again.')
+    return render(request, 'JobSeeker/otp_verification.html')
 
 
 
 def index(request):
     return render(request, "index.html")
 
-# Registration
-def user_register(request):
-    if request.method == 'POST':
-        form = RegistrationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('loginpage') 
-    else:
-        form = RegistrationForm()
-    return render(request, 'JobSeeker/candidate_register.html', {'form': form})
 
-# user_login
 def user_login(request):
     if request.method == 'POST':
-        email_or_username = request.POST['email_or_username']
-        password1 = request.POST['password1'] 
-        user = authenticate(request, username=email_or_username, password=password1)
+        username = request.POST.get('username') 
+        password = request.POST.get('password') 
+        user = authenticate(request, username=username, password=password)
 
         if user is not None:
             login(request, user)
@@ -42,10 +81,13 @@ def user_login(request):
                 return redirect('create_profile')
             elif user.user_type == 'employer':
                 return redirect('create_company_profile')
-            else:
-                messages.error(request, 'Invalid email/username or password. Please try again.')
-        messages.error(request, 'Invalid email/username or password. Please try again.')
+            elif user.is_superuser:
+                return redirect('admin_main')
+        else:
+            messages.error(request, 'Invalid email/username or password. Please try again.')
+
     return render(request, 'JobSeeker/loginpage.html')
+
 
 # profile_creation
 def create_profile(request):
@@ -185,7 +227,7 @@ def apply_job(request, job_id):
             application.save()
             messages.success(request, 'Application submitted successfully!')
             time.sleep(2)
-            return redirect('main_page')
+            return redirect('job_list')
     else:
         form = JobApplicationForm()
     return render(request, 'JobSeeker/apply_to_job.html', {'form': form, 'job': job })
@@ -219,7 +261,9 @@ def job_search(request):
     else:
         return redirect('job_list')  
 
-
+@login_required
+def admin_main(request):
+    return render(request, 'admin/admin_main.html')
 
 
 
