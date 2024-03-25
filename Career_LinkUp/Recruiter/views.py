@@ -3,6 +3,9 @@ from .models import JobListing
 from .forms import JobForm
 from django.contrib import messages
 from JobSeeker.models import CompanyProfile,JobApplication
+from django.http import FileResponse, Http404
+from django.conf import settings
+import os
 
 def create_job(request):
     companies = CompanyProfile.objects.all()
@@ -59,11 +62,6 @@ def update_application_status(request, application_id):
         application.save()
     return redirect('view_all_applicants')
 
-
-
-from django.http import FileResponse, Http404
-from django.conf import settings
-import os
 
 def serve_resume(request, resume_path):
     resume_file_path = os.path.join(settings.MEDIA_ROOT, resume_path)

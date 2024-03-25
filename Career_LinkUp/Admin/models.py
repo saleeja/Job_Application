@@ -11,13 +11,15 @@ class UserActivityLog(models.Model):
         return f"{self.user.username} - {self.action} - {self.timestamp}"
 
 
+class IssueReport(models.Model):
+    REPORT_CHOICES = [
+        ('inappropriate_content', 'Inappropriate Content'),
+        ('harassment', 'Harassment'),
+        ('other', 'Other'),
+    ]
 
-class ReportedIssue(models.Model):
-    reported_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    issue_description = models.TextField()
-    resolved = models.BooleanField(default=False)
-    resolution_notes = models.TextField(blank=True, null=True)
-    reported_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Issue reported by {self.reported_by.username}"
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    issue_type = models.CharField(max_length=50, choices=REPORT_CHOICES)
+    description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=20, default='pending')

@@ -126,7 +126,7 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                             <a href="#" class="dropdown-item">My Profile</a>
-                            <a href="#" class="dropdown-item">Settings</a>
+                            <a href="{% url 'report_issue'%}" class="dropdown-item">Report Issue</a>
                             <form id="logout-form" method="post" action="{% url 'logout_view' %}">
                                 {% csrf_token %}
                                 <button type="button" class="dropdown-item" onclick="submitForm()">Log Out</button>

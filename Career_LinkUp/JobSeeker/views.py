@@ -22,6 +22,8 @@ from Admin.models import UserActivityLog
 from django.contrib.admin.views.decorators import staff_member_required
 from Recruiter.models import JobListing
 from Recruiter.forms import JobForm 
+from Admin.models import IssueReport
+from Admin.forms import IssueReportForm
 
 
 
@@ -226,7 +228,7 @@ def job_list_applicant(request):
 
 def apply_job(request, job_id):
     job = get_object_or_404(JobListing, id=job_id)
-    already_applied = False  # Initialize variable to track if user has already applied
+    already_applied = False  
     
     if request.method == 'POST':
         form = JobApplicationForm(request.POST, request.FILES)
@@ -339,76 +341,56 @@ def edit_job_listing(request, listing_id):
 @login_required
 @staff_member_required
 def delete_job_listing(request, listing_id):
-    # Get the job listing object or return 404 if not found
     listing = get_object_or_404(JobListing, pk=listing_id)
-    
     if request.method == 'POST':
-        # If the request method is POST, it means the user has confirmed deletion
         listing.delete()
         return redirect('admin_job_listings')
-    
-    # If the request method is GET, render the delete confirmation page
     return render(request, 'admin/delete_job_listing.html', {'listing': listing})
 
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import JobListing
 
 @login_required
 @staff_member_required
 def approve_job_listing(request, listing_id):
     listing = get_object_or_404(JobListing, pk=listing_id)
-    # Logic to approve the job listing (e.g., updating the status)
-    # You can add your approval logic here, such as setting listing.status = 'approved'
     listing.status = 'approved'
     listing.save()
     return redirect('admin_job_listings')
 
 
-# views.py
-from django.shortcuts import render, get_object_or_404
-from Admin.models import ReportedIssue
-
-def reported_issues(request):
-    issues = ReportedIssue.objects.all()
-    return render(request, 'admin/reported_issues.html', {'issues': issues})
-
-def issue_detail(request, issue_id):
-    issue = get_object_or_404(ReportedIssue, pk=issue_id)
-    return render(request, 'admin/issue_detail.html', {'issue': issue})
-
-def resolve_issue(request, issue_id):
-    issue = get_object_or_404(ReportedIssue, pk=issue_id)
+def report_issue(request):
     if request.method == 'POST':
-        issue.resolved = True
-        issue.resolution_notes = request.POST.get('resolution_notes')
-        issue.save()
-        return redirect('reported_issues')
-    return render(request, 'admin/resolve_issue.html', {'issue': issue})
+        form = IssueReportForm(request.POST)
+        if form.is_valid():
+            issue_report = form.save(commit=False)
+            issue_report.user = request.user
+            issue_report.save()
+            return redirect('issue_report_confirmation')  
+    else:
+        form = IssueReportForm()
+    return render(request, 'JobSeeker/report_issue.html', {'form': form})
 
 
-# views.py
-import json
-from django.shortcuts import render
-from django.db.models import Count
-from django.db.models.functions import TruncDate
-from Admin.models import UserActivityLog
+def issue_report_confirmation(request):
+    return render(request, 'JobSeeker/issue_report_confirmation.html')
 
-def user_activity_report(request):
-    # Get count of logins per day for the last week
-    import datetime
-    end_date = datetime.date.today()
-    start_date = end_date - datetime.timedelta(days=7)
-    activity_data = UserActivityLog.objects.filter(action='login', timestamp__range=(start_date, end_date)).\
-                    annotate(date=TruncDate('timestamp')).\
-                    values('date').\
-                    annotate(login_count=Count('id'))
+def admin_issue_reports(request):
+    issue_reports = IssueReport.objects.all()
+    return render(request, 'JobSeeker/admin_issue_reports.html', {'issue_reports': issue_reports})
 
-    # Convert queryset to list of dictionaries
-    activity_data_list = list(activity_data)
 
-    # Serialize the list to JSON format
-    activity_data_json = json.dumps(activity_data_list)
+def send_issue_resolved_email(user_email):
+    subject = 'Your reported issue has been resolved'
+    message = 'Your reported issue has been resolved. Thank you for your patience.'
+    sender_email = settings.EMAIL_HOST_USER
+    send_mail(subject, message, sender_email, [user_email], fail_silently=False)
 
-    # Pass the data to the template
-    return render(request, 'admin/mai_admin.html', {'activity_data_json': activity_data_json})
+def update_issue_report_status(request, report_id):
+    issue_report = IssueReport.objects.get(id=report_id)
+    issue_report.status = 'resolved'
+    issue_report.save()
+    send_issue_resolved_email(issue_report.user.email)
+    return redirect('admin_issue_reports')
+
+
+
 
