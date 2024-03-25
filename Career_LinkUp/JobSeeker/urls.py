@@ -40,6 +40,8 @@ urlpatterns = [
     path('admin_issue_reports/', views.admin_issue_reports, name='admin_issue_reports'),
     path('update-issue/<int:report_id>/', views.update_issue_report_status, name='update_issue_report_status'),
     path('send-issue-resolved-email/', views.send_issue_resolved_email, name='send_issue_resolved_email'),
+    # path('send_mail_to_employer/', views.send_mail_to_employer, name='send_mail_to_employer'),
+
 
 
 

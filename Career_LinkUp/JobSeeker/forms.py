@@ -43,12 +43,9 @@ class RegistrationForm(UserCreationForm):
 
 
 class ProfileForm(forms.ModelForm):
-    first_name = forms.CharField(max_length=150)
-    last_name = forms.CharField(max_length=150)
     class Meta:
         model = JoobseekerProfile
-        fields = ['first_name','last_name','gender','phone_number', 'address','current_location','education','profile_summary', 'experience_status', 'resume', 
-                  'key_skills', 'projects','certification_details', 'department', 'certificate','languages_known']
+        fields =  ['phone_number', 'address', 'current_location', 'gender', 'experience_status', 'resume', 'profile_summary', 'key_skills', 'projects', 'education', 'certificate', 'certification_details', 'department', 'languages_known']
 
 
 class CompanyProfileForm(forms.ModelForm):

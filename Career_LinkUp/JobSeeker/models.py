@@ -24,7 +24,9 @@ class CustomUser(AbstractUser):
     groups = models.ManyToManyField(Group, verbose_name=('groups'), blank=True, related_name='customuser_set')
     user_permissions = models.ManyToManyField(Permission, verbose_name=('user permissions'), blank=True, related_name='customuser_set')
  
-
+    def __str__(self):
+        return self.user.username
+    
 
 class JoobseekerProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)

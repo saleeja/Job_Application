@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Job Application</title>
+</head>
+<body>
+    <h2>New Job Application</h2>
+    <p>Dear {{ job.employer }},</p>
+    
+    <p>A new job application has been submitted for the position of "{{ job.title }}" at your company.</p>
+    
+    <p>Applicant Details:</p>
+    <ul>
+        <li>Name: {{ applicant.full_name }}</li>
+        <li>Email: {{ applicant.email }}</li>
+        <!-- Add any other applicant details you want to include -->
+    </ul>
+    
+    <p>subject = 
+            message = </p>
+    
+    <p>Thank you!</p>
+</body>
+</html>
