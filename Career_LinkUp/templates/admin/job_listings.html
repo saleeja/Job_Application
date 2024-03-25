@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Job Listings</title>
+</head>
+<body>
+    <h1>Admin Job Listings</h1>
+    <ul>
+        {% for listing in job_listings %}
+            <li>
+                {{ listing.title }}
+                <a href="{% url 'approve_job_listing' listing.id %}">Approve</a>
+                <a href="{% url 'delete_job_listing' listing.id %}">Delete</a>
+                
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+

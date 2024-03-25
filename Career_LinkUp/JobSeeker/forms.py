@@ -47,9 +47,12 @@ class RegistrationForm(UserCreationForm):
     #     return email
 
 class ProfileForm(forms.ModelForm):
+    first_name = forms.CharField(max_length=150)
+    last_name = forms.CharField(max_length=150)
     class Meta:
         model = JoobseekerProfile
-        fields = '__all__' 
+        fields = ['first_name','last_name','gender','phone_number', 'address','current_location','education','profile_summary', 'experience_status', 'resume', 
+                  'key_skills', 'projects','certification_details', 'department', 'certificate','languages_known']
 
 
 class CompanyProfileForm(forms.ModelForm):
@@ -66,7 +69,7 @@ class ApplyJobForm(forms.ModelForm):
 class JobApplicationForm(forms.ModelForm):
     class Meta:
         model = JobApplication
-        fields = ['applicant','applicant_email', 'resume', 'cover_letter']
+        fields = [ 'resume', 'cover_letter']
 
 class JobSearchForm(forms.Form):
     search_query = forms.CharField(label='Search Jobs', max_length=100)

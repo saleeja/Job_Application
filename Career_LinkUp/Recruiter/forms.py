@@ -6,7 +6,7 @@ from JobSeeker.models import JobApplication
 class JobForm(forms.ModelForm):
     class Meta:
         model = JobListing
-        fields = '__all__'
+        exclude = ['company', 'updated_at','status']
 
 class ApplicationStatusForm(forms.ModelForm):
     class Meta:

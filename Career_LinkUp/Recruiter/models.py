@@ -9,6 +9,16 @@ class JobListing(models.Model):
         ('contract', 'Contract'),
         ('remote', 'Remote'),
     ]
+
+    PENDING = 'pending'
+    APPROVED = 'approved'
+    REJECTED = 'rejected'
+
+    STATUS_CHOICES = [
+        (PENDING, 'Pending'),
+        (APPROVED, 'Approved'),
+        (REJECTED, 'Rejected'),
+    ]
     company = models.ForeignKey('JobSeeker.CompanyProfile', on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     description = models.TextField()
@@ -23,6 +33,8 @@ class JobListing(models.Model):
     how_to_apply = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=PENDING)
+
 
     def __str__(self):
         return self.title

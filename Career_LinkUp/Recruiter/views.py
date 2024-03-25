@@ -9,7 +9,9 @@ def create_job(request):
     if request.method == 'POST':
         form = JobForm(request.POST)
         if form.is_valid():
-            form.save()
+            job = form.save(commit=False)
+            job.company = request.user.companyprofile  
+            job.save()
             messages.success(request, 'Job successfully created!')
             return redirect('main_comp')  
     else:

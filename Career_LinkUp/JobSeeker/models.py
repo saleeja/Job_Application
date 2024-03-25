@@ -13,6 +13,7 @@ class CustomUser(AbstractUser):
     )
     user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES)
     full_name = models.CharField(max_length=150)
+    created_at = models.DateTimeField(default=timezone.now)
     is_verified = models.BooleanField(default=False)
     otp = models.CharField(max_length=6, blank=True, null=True)
 

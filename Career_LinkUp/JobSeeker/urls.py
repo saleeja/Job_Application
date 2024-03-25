@@ -28,6 +28,22 @@ urlpatterns = [
     path('create_profile/<str:user_type>/', views.create_profile, name='create_profile'),
     path('job/search/', views.job_search, name='job_search'),
     path('admin_main/', views.admin_main, name='admin_main'),
+    path('newly_joined_users/', views.newly_joined_users, name='newly_joined_users'),
+    path('user_profile/<int:user_id>/', views.user_profile, name='user_profile'),
+    path('delete_user/<int:user_id>/', views.delete_user, name='delete_user'),
+    path('admin_job_listings/', views.admin_job_listings, name='admin_job_listings'),
+    path('edit_job_listing/<int:listing_id>/edit/', views.edit_job_listing, name='edit_job_listing'),
+    path('delete_job_listing/<int:listing_id>/delete/', views.delete_job_listing, name='delete_job_listing'),
+    path('approve_job_listing/<int:listing_id>/approve/', views.approve_job_listing, name='approve_job_listing'),
+    path('reported_issues/', views.reported_issues, name='reported_issues'),
+    path('issue_detail/<int:issue_id>/', views.issue_detail, name='issue_detail'),
+    path('resolve_issue/<int:issue_id>/resolve/', views.resolve_issue, name='resolve_issue'),
+    path('analytics/user-activity/', views.user_activity_report, name='user_activity_report'),
+
+
+
+
+
   
 
 ]

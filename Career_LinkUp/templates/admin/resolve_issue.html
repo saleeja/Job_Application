@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Resolve Issue</title>
+</head>
+<body>
+    <h1>Resolve Issue</h1>
+    <h2>{{ issue.issue_description }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="resolution_notes">Resolution Notes:</label><br>
+        <textarea id="resolution_notes" name="resolution_notes" rows="4" cols="50"></textarea><br>
+        <button type="submit">Resolve</button>
+    </form>
+    <a href="{% url 'reported_issues' %}">Cancel</a>
+</body>
+</html>

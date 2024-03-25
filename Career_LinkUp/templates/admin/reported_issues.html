@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reported Issues</title>
+</head>
+<body>
+    <h1>Reported Issues</h1>
+    <ul>
+        {% for issue in issues %}
+            <li>
+                <a href="{% url 'issue_detail' issue.id %}">{{ issue.issue_description }}</a>
+                {% if issue.resolved %}
+                    <span style="color: green;">(Resolved)</span>
+                {% else %}
+                    <span style="color: red;">(Not Resolved)</span>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            text-align: left;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .profile-info p {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .profile-info .label {
+            font-weight: bold;
+            width: 120px;
+            color: #555;
+        }
+
+        .profile-info .value {
+            flex: 1;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>User Profile</h1>
+        <div class="profile-info">
+            <p><span class="label">Name:</span> <span class="value">{{ user.full_name }}</span></p>
+            <p><span class="label">Username:</span> <span class="value">{{ user.username }}</span></p>
+            <p><span class="label">Email:</span> <span class="value">{{ user.email }}</span></p>
+            <!-- Add other user information as needed -->
+        </div>
+    </div>
+</body>
+</html>

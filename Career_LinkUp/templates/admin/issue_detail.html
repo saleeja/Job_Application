@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Issue Detail</title>
+</head>
+<body>
+    <h1>Issue Detail</h1>
+    <h2>{{ issue.issue_description }}</h2>
+    <p>Reported by: {{ issue.reported_by }}</p>
+    <p>Reported at: {{ issue.reported_at }}</p>
+    <p>Status: {% if issue.resolved %}Resolved{% else %}Not Resolved{% endif %}</p>
+    {% if issue.resolved %}
+        <p>Resolution Notes: {{ issue.resolution_notes }}</p>
+    {% endif %}
+    <a href="{% url 'resolve_issue' issue.id %}">Resolve Issue</a>
+    <a href="{% url 'reported_issues' %}">Back to Reported Issues</a>
+</body>
+</html>
