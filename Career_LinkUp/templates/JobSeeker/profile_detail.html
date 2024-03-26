@@ -6,9 +6,8 @@
     <title>User Profile Detail</title>
 </head>
 <body>
-    <h1>User Profile Detail</h1>
+    <h1>Profile Detail</h1>
     <div>
-        <h2>Personal Information</h2>
         <form method="POST" action="{% url 'profile_edit' %}">
             {% csrf_token %}
             <div class="form-group">
@@ -62,12 +61,13 @@
             <div class="form-group">
                 <label for="gender">Gender:</label>
                 <input type="text" id="gender" name="gender" value="{{ profile.gender }}" readonly>
-            </div>
-            <button type="submit">Edit</button>
+            </div><br>
+            <button type="submit"><a href="{% url 'profile_edit' %}">Edit Profile</a><br>
+            <button type="submit"><a href="{% url 'main_seeker' %}">Back to Home</a>
+
+            
         </form>
         <br>
-        <a href="{% url 'main_seeker' %}">Back to Home</a>
-    </div>
 </body>
 </html>
 

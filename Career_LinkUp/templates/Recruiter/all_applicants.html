@@ -106,11 +106,9 @@
         <tbody>
             {% for application in job_applications %}
             <tr>
-                <td>{{ application.applicant_email }}</td>
+                <td>{{ application.user.full_name }}{{ application.applicant_email }}</td>
                 <td><a href="{{ application.resume.url }}" target="_blank">Download Resume</a></td>
-                <td class="cover-letter-cell">
-                    <div class="cover-letter-content">{{ application.cover_letter }}</div>
-                </td>
+                <td>{{ application.cover_letter }}</td>
                 <td>{{ application.date_applied }}</td>
                 <td>{{ application.status }}</td>
                 <td>

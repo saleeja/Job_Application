@@ -111,12 +111,14 @@
                             <textarea id="id_profile_summary" name="profile_summary" rows="4" required></textarea><br><br>
                             <label for="id_key_skills">Key Skills:</label><br>
                             <input type="text" id="id_key_skills" name="key_skills" required><br><br>
+
+                            <label for="id_projects">Projects:</label><br>
+                            <textarea id="id_projects" name="projects" rows="4" required></textarea><br><br>
+                            
                         </div>
                         <div>
                             
                             
-                            <label for="id_projects">Projects:</label><br>
-                            <textarea id="id_projects" name="projects" rows="4" required></textarea><br><br>
                             
                             <label for="id_education">Education:</label><br>
                             <textarea id="id_education" name="education" rows="4" required></textarea><br><br>
@@ -141,9 +143,11 @@
                             </select><br><br>
                             
                             <input type="hidden" id="id_user_id" name="user_id" value="{{ user.id }}">
+                            <button type="submit">Submit</button>
                         </div>
+                        
                     </div>
-                    <button type="submit">Submit</button>
+                    
                 </form>
             </div>
         </div>

@@ -37,7 +37,8 @@
             <img src="{{ profile.logo.url }}" alt="Company Logo" style="max-width: 200px;">
         </div>
         {% endif %}
-        <button type="submit">Edit Profile</button>
+        <a href="{% url 'com_edit_profile' %}">Edit Profile</a>
+        <a href="{% url 'main_comp' %}">Go back to Profile Detail</a>
     </form>
 </body>
 </html>

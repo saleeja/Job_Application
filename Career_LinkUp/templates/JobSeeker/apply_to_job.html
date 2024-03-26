@@ -27,12 +27,16 @@
                 <p class="card-text"><strong>How to Apply:</strong> {{ job.how_to_apply }}</p>
             </div>
         </div>
-
-        <form id="job_application_form" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-primary">Submit Application</button>
-        </form>
+        {% if not already_applied %}
+            <form id="job_application_form" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Submit Application</button>
+            </form>
+        {% else %}
+            <p>You have already applied for this job.</p>
+            <button type="button" disabled>Apply</button>
+        {% endif %}
     </div>
 
     <!-- Include SweetAlert JS -->

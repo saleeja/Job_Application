@@ -8,8 +8,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from Recruiter.models import JobListing
 from Recruiter.views import main_comp,job_list_com
 from Recruiter.views import main_comp,job_list_com
-from django.db.models import F
-import time
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from django.core.mail import send_mail
@@ -17,14 +15,16 @@ from django.conf import settings
 from .forms import RegistrationForm
 from django.utils.crypto import get_random_string
 from django.db import IntegrityError
-from django.contrib.auth import get_user_model
-from Admin.models import UserActivityLog
 from django.contrib.admin.views.decorators import staff_member_required
 from Recruiter.models import JobListing
 from Recruiter.forms import JobForm 
 from Admin.models import IssueReport
 from Admin.forms import IssueReportForm
 
+
+
+def index(request):
+    return render(request, "index.html")
 
 
 def user_register(request):
@@ -55,8 +55,6 @@ def user_register(request):
         form = RegistrationForm()
     return render(request, 'JobSeeker/candidate_register.html', {'form': form})
 
-
-
 def otp_verification(request):
     if request.method == 'POST':
         entered_otp = request.POST.get('otp')
@@ -71,12 +69,6 @@ def otp_verification(request):
             # OTP verification failed
             messages.error(request, 'Invalid OTP. Please try again.')
     return render(request, 'JobSeeker/otp_verification.html')
-
-
-
-def index(request):
-    return render(request, "index.html")
-
 
 def user_login(request):
     if request.method == 'POST':
@@ -94,13 +86,11 @@ def user_login(request):
                 return redirect('admin_main')
         else:
             messages.error(request, 'Invalid email/username or password. Please try again.')
-
     return render(request, 'JobSeeker/loginpage.html')
 
-import logging
 
-logger = logging.getLogger(__name__)
 # profile_creation
+@login_required
 def create_profile(request):
     try:
         profile = request.user.joobseekerprofile  
@@ -112,11 +102,7 @@ def create_profile(request):
                 profile = form.save(commit=False)
                 profile.user = request.user  
                 profile.save()
-                logger.info("Form saved successfully")
                 return redirect('profile_detail')
-            else:
-                logger.error("Form errors: %s", form.errors)
-                # return redirect('profile_detail')
         else:
             form = ProfileForm()
         return render(request, 'JobSeeker/profile_form.html', {'form': form})
@@ -196,6 +182,10 @@ def com_profile_detail(request):
     except CompanyProfile.DoesNotExist:
         return redirect('com_create_profile')
     
+def main_comp(request):
+    return render(request,'Recruiter/main.html')
+
+
 def com_edit_profile(request):
     profile = CompanyProfile.objects.get(user=request.user)
     if request.method == 'POST':
@@ -216,13 +206,22 @@ def logout_view(request):
     # return render(request, 'JobSeeker/logout.html')
 
 
-def job_list(request):
-    job_listings = JobListing.objects.all()
-    context = {
-        'job_listings': job_listings
-    }
+# def job_list(request):
+#     job_listings = JobListing.objects.all()
+#     context = {
+#         'job_listings': job_listings
+#     }
 
-    return render(request, 'JobSeeker/main.html', context) 
+#     return render(request, 'JobSeeker/main.html', context) 
+from .models import JobListing, JobApplication
+
+def job_list(request):
+    job_listings = JobListing.objects.all().order_by('-created_at')
+    user = request.user
+    applied_jobs = JobApplication.objects.filter(applicant_id=user.id).values_list('job_id', flat=True)
+    for job in job_listings:
+        job.applied_at = job.id in applied_jobs
+    return render(request, 'JobSeeker/main.html', {'job_listings': job_listings})
 
 
 
@@ -231,39 +230,54 @@ def job_list_applicant(request):
     return render(request, 'JobSeeker/job_list_applicant.html', {'jobs': jobs})
 
 
-
-# def apply_job(request, job_id):
-#     job = get_object_or_404(JobListing, id=job_id)
-#     already_applied = False  
-    
-#     if request.method == 'POST':
-#         form = JobApplicationForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             if JobApplication.objects.filter(job=job, applicant=request.user).exists():
-#                 messages.error(request, 'You have already applied for this job.')
-#                 return redirect('job_list')
-                
-#             application = form.save(commit=False)
-#             application.job = job
-#             application.applicant = request.user  
-#             application.applicant_email = request.user.email 
-#             application.save()
-#             messages.success(request, 'Application submitted successfully!')
-#             return redirect('job_list')
-#     else:
-#         form = JobApplicationForm()
-#         if request.user.is_authenticated:
-#             already_applied = JobApplication.objects.filter(job=job, applicant=request.user).exists()
-    
-#     return render(request, 'JobSeeker/apply_to_job.html', {'form': form, 'job': job, 'already_applied': already_applied})
-
-
 def main_page(request):
     return render (request,'JobSeeker/main.html')
 
 def job_applications(request):
     applications = JobApplication.objects.all()
     return render(request, 'JobSeeker/job_applications.html', {'applications': applications})
+
+def apply_job(request, job_id):
+    job = get_object_or_404(JobListing, id=job_id)
+    already_applied = JobApplication.objects.filter(job=job, applicant=request.user).exists()
+
+    
+    if request.method == 'POST':
+        form = JobApplicationForm(request.POST, request.FILES)
+        if form.is_valid():
+            if already_applied:
+                messages.error(request, 'You have already applied for this job.')
+                return redirect('job_list')
+                
+            application = form.save(commit=False)
+            application.job = job
+            application.applicant = request.user  
+            application.applicant_email = request.user.email 
+            application.save()
+            
+    
+            # Sending email notification to the recruiter
+            subject = f"A new job application has been submitted for the position of { job.title } at your company."
+            message = f"{ application.cover_letter } You can review the application details and take further action as needed."
+            sender_email =  settings.EMAIL_HOST_USER  
+            recipient_email = job.company.user.email 
+            send_mail(subject, message, sender_email, [recipient_email], fail_silently=False)
+
+            
+            print("Subject:", subject) 
+            print("Message:", message)
+            print("Sender Email:", sender_email)
+            print("Recipient Email:", recipient_email)
+            
+            messages.success(request, 'Application submitted successfully! An email notification has been sent to the recruiter.')
+            return redirect('job_list')
+    else:
+        form = JobApplicationForm()
+        if request.user.is_authenticated:
+            already_applied = JobApplication.objects.filter(job=job, applicant=request.user).exists()
+    
+    return render(request, 'JobSeeker/apply_to_job.html', {'form': form, 'job': job, 'already_applied': already_applied})
+
 
 def application_status(request, application_id):
     application = get_object_or_404(JobApplication, id=application_id)
@@ -283,6 +297,7 @@ def job_search(request):
             Q(company__name__icontains=query) |  
             Q(created_at__icontains=query) |    
             Q(job_type__icontains=query)
+            
         )
         return render(request, 'JobSeeker/job_search_list.html', {'job_listing': job_listing, 'query': query})
     else:
@@ -397,49 +412,6 @@ def update_issue_report_status(request, report_id):
     send_issue_resolved_email(issue_report.user.email)
     return redirect('admin_issue_reports')
 
-from django.http import HttpResponse
-
-def apply_for_job(request):
-    # Process job application logic
-    # Sending email
-    subject = 'Job Application'
-    message = 'Thank you for applying for the job.'
-    from_email = 'your@example.com'  # Replace with your actual email address
-    to_email = ['recipient@example.com']  # Replace with recipient's email address
-    send_mail(subject, message, from_email, to_email)
-
-    return HttpResponse('Job application submitted successfully.')
 
 
-def apply_job(request, job_id):
-    job = get_object_or_404(JobListing, id=job_id)
-    already_applied = False  
-    
-    if request.method == 'POST':
-        form = JobApplicationForm(request.POST, request.FILES)
-        if form.is_valid():
-            if JobApplication.objects.filter(job=job, applicant=request.user).exists():
-                messages.error(request, 'You have already applied for this job.')
-                return redirect('job_list')
-                
-            application = form.save(commit=False)
-            application.job = job
-            application.applicant = request.user  
-            application.applicant_email = request.user.email 
-            application.save()
-            print(application)
-            # Sending email notification to the recruiter
-            subject = f"A new job application has been submitted for the position of { job.title } at your company."
-            message = f"{ application.cover_letter } You can review the application details and take further action as needed."
-            sender_email =  settings.EMAIL_HOST_USER  
-            recipient_email = job.company.user.email  # Assuming user is a CustomUser instance linked to CompanyProfile
-            send_mail(subject, message, sender_email, [recipient_email], fail_silently=False)
-            
-            messages.success(request, 'Application submitted successfully! An email notification has been sent to the recruiter.')
-            return redirect('job_list')
-    else:
-        form = JobApplicationForm()
-        if request.user.is_authenticated:
-            already_applied = JobApplication.objects.filter(job=job, applicant=request.user).exists()
-    
-    return render(request, 'JobSeeker/apply_to_job.html', {'form': form, 'job': job, 'already_applied': already_applied})
+

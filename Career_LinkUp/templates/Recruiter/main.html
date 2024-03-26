@@ -49,7 +49,7 @@
                 <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
                     <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
                 </a>
-                <a href="#" class="sidebar-toggler flex-shrink-0">
+                <a href="#" class="sidebar-toggler ">
                     <i class="fa fa-bars"></i>
                 </a>
                 <form class="d-none d-md-flex ms-4">
@@ -122,10 +122,10 @@
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                             <!-- <img class="rounded-circle me-lg-2" src="{% static 'main/img/user.jpg'%}" alt="" style="width: 40px; height: 40px;"> -->
-                            <span class="d-none d-lg-inline-flex">John Doe</span>
+                            <span class="d-none d-lg-inline-flex">{{ user.username }}</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                            <a href="#" class="dropdown-item">My Profile</a>
+                            <a href="{%url 'com_profile_detail'%}" class="dropdown-item">My Profile</a>
                             <a href="{% url 'report_issue'%}" class="dropdown-item">Report Issue</a>
                             <form id="logout-form" method="post" action="{% url 'logout_view' %}">
                                 {% csrf_token %}
@@ -169,7 +169,19 @@
             </div>
             <!-- Navbar End -->
             <div class="container-fluid pt-4 px-4">
-                
+                <h1>Job Listings</h1>
+                <ul class="job-list">
+                    {% for job in jobs %}
+                        <li class="job-item">
+                            <h3>{{ job.title }}</h3>
+                            <p>{{ job.description }}</p>
+                            <div class="job-links">
+                                <a href="{% url 'edit_job' job.id %}" class="btn btn-primary">Edit</a>
+                                <a href="{% url 'delete_job' job.id %}" class="btn btn-danger">Delete</a>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
             </div>
 
 
