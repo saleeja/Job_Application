@@ -4,7 +4,7 @@ Admin
 Job Seeker
 Employer/Recruiter
 2. User Authentication:
-OTP Verification: New users are required to verify their account via OTP (One-Time Password) sent to their registered email or phone number.
+OTP Verification: New users are required to verify their account via OTP (One-Time Password) .
 Registration and login functionality for all user types.
 Login Form:
 Username or Email
